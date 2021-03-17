@@ -253,7 +253,7 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@teachablemachine/pose@^0.8.6":
+"@teachablemachine/pose@~0.8.6":
   version "0.8.6"
   resolved "https://registry.yarnpkg.com/@teachablemachine/pose/-/pose-0.8.6.tgz#d37baa9d65a9b0577296e4c1f0d3cf0de17dcaf0"
   integrity sha512-72UHof2okPdyKlDMSnFcDk/h7dj4I9BBbGsJs64P+B/WQb1rwFcxAeeUFud5rJ2HFwElLDLEjnyaHZljeWV2Bg==
@@ -262,7 +262,7 @@
     autobind-decorator "^2.4.0"
     seedrandom "^3.0.1"
 
-"@tensorflow-models/posenet@^2.2.0", "@tensorflow-models/posenet@~2.2.2":
+"@tensorflow-models/posenet@^2.2.0":
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/@tensorflow-models/posenet/-/posenet-2.2.2.tgz#2abcfa33b43892135d232c9c4408a38cc8f74ba6"
   integrity sha512-0SXIksRet/IdX7WVH+JSD6W3upkGHix1hwtd3xykIoIMGR7zQ4SC5+wZcNt9ofASyxNYQoI+tUULUo4LNw0c3w==
@@ -316,7 +316,7 @@
   resolved "https://registry.yarnpkg.com/@tensorflow/tfjs-layers/-/tfjs-layers-3.3.0.tgz#d2097c5b22ec12e5fdbe470a88ca0a34a95ca11f"
   integrity sha512-qO+TL2I29vWUiuFcQJXNyayWFYagwR+SIfbex8p5jjYaCGHGwE5GQcrH+ngoCgKZxm5tdMvYJsJPnih2M3fYzQ==
 
-"@tensorflow/tfjs@^3.3.0":
+"@tensorflow/tfjs@~3.3.0":
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/@tensorflow/tfjs/-/tfjs-3.3.0.tgz#db92099dd48c0eb1c1673f705125d2b57496a1a3"
   integrity sha512-xo22GCUCGcPtNGIdDpLPrp9ms3atXmzX8AF4y3aIBEwK5KlvGe+ZhcoQ2xEOCPQGBr7NB7AO6rwT8gRoziAHVg==
