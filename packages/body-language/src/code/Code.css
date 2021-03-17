@@ -1,0 +1,14 @@
+.Code {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.Code-code {
+    padding: 20px;
+}
+
+.Code-button-try {
+    font-size: 2vmin;
+}
