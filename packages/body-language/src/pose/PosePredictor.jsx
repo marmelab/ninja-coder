@@ -50,7 +50,7 @@ export const PosePredictor = () => {
             }
 
             setLoading(false);
-        }, 3000);
+        }, 2000);
     }, [prediction]);
 
     useEffect(() => {
