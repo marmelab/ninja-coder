@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 // More API functions here:
 // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
 
@@ -17,44 +17,44 @@ const getBestPrediction = predictions => {
 
 export const PosePredictor = () => {
     const [prediction, setPrediction] = useState(null);
-    const [afterPrediction, setAfterPrediction] = useState(null);
     const [loading, setLoading] = useState(false);
     const [savedPredictions, setSavedPredictions] = useState([]);
+    const previousPredictionRef = useRef();
 
     useEffect(() => {
-        if (prediction == null || loading) {
+        if (
+            prediction == null ||
+            (loading && prediction != previousPredictionRef.current)
+        ) {
             return;
         }
         setLoading(true);
 
         setTimeout(() => {
             console.log('Checking Prediction', prediction);
-            console.log('Checking Picked Prediction', afterPrediction);
+            console.log(
+                'Checking Picked Prediction',
+                previousPredictionRef.current
+            );
 
             if (
                 prediction != null &&
-                afterPrediction != null &&
-                prediction.probability > 0.9 &&
-                afterPrediction.probability > 0.9 &&
-                prediction.className === afterPrediction.className
+                previousPredictionRef.current != null &&
+                prediction.className === previousPredictionRef.current.className
             ) {
                 setSavedPredictions([
                     ...savedPredictions,
-                    { ...afterPrediction },
+                    { ...previousPredictionRef.current },
                 ]);
             }
 
             setLoading(false);
-        }, 2000);
+        }, 3000);
     }, [prediction]);
 
     useEffect(() => {
-        if (loading === true) {
-            setAfterPrediction({ ...prediction });
-        } else {
-            setAfterPrediction(null);
-        }
-    }, [loading]);
+        previousPredictionRef.current = prediction;
+    }, [prediction]);
 
     const init = async () => {
         // load the model and metadata
