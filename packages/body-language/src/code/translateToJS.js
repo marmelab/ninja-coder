@@ -40,7 +40,7 @@ export function translateOneIntruction(instruction) {
 }
 
 export function translate(instructions) {
-    return instructions.map(instruction => {
-        return translateOneIntruction(instruction);
-    });
+    return instructions.reduce((code, instruction) => {
+        return code.concat(translateOneIntruction(instruction));
+    }, '');
 }
