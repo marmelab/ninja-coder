@@ -1,4 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
+
+import { useNinjaContext } from '../NinjaContext';
+
 // More API functions here:
 // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
 
@@ -16,9 +19,10 @@ const getBestPrediction = predictions => {
 };
 
 export const PosePredictor = () => {
-    const [prediction, setPrediction] = useState(null);
+    const { pushPrediction } = useNinjaContext();
+
     const [loading, setLoading] = useState(false);
-    const [savedPredictions, setSavedPredictions] = useState([]);
+    const [prediction, setPrediction] = useState(null);
     const previousPredictionRef = useRef();
 
     useEffect(() => {
@@ -42,10 +46,7 @@ export const PosePredictor = () => {
                 previousPredictionRef.current != null &&
                 prediction.className === previousPredictionRef.current.className
             ) {
-                setSavedPredictions([
-                    ...savedPredictions,
-                    { ...previousPredictionRef.current },
-                ]);
+                pushPrediction({ ...previousPredictionRef.current });
             }
 
             setLoading(false);
@@ -126,11 +127,6 @@ export const PosePredictor = () => {
                     ? `${prediction.className}(${prediction.probability})`
                     : ''}
             </div>
-            <ul>
-                {savedPredictions.map((savedPrediction, index) => {
-                    return <li key={index}>{savedPrediction.className}</li>;
-                })}
-            </ul>
         </div>
     );
 };
