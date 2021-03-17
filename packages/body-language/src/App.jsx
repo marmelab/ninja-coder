@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 
-import { init } from './PoseModel';
+import { PosePredictor } from './pose/PosePredictor';
 import { Code } from './code/Code';
 import {
     KEYWORD_CONSOLE,
@@ -28,19 +28,9 @@ const instructions = [
 ];
 
 function App() {
-    const handleStart = () => {
-        init();
-    };
-
     return (
         <div className="App">
-            <button type="button" onClick={handleStart}>
-                Start
-            </button>
-            <div>
-                <canvas id="canvas"></canvas>
-            </div>
-            <div id="label-container"></div>
+            <PosePredictor />
             <Code instructions={instructions} />
         </div>
     );

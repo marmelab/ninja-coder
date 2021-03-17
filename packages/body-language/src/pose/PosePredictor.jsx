@@ -1,3 +1,4 @@
+import React from 'react';
 // More API functions here:
 // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
 
@@ -6,13 +7,13 @@ let model, webcam, ctx, labelContainer, maxPredictions;
 
 import * as tmPose from '@teachablemachine/pose';
 
-export async function init() {
+async function init() {
     // load the model and metadata
     // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
     // Note: the pose library adds a tmPose object to your window (window.tmPose)
     model = await tmPose.load(
-        '../models/model.json',
-        '../models/metadata.json'
+        'public/models/model.json',
+        'public/models/metadata.json'
     );
     maxPredictions = model.getTotalClasses();
 
@@ -42,13 +43,18 @@ async function loop() {
     window.requestAnimationFrame(loop);
 }
 
+const bestPrediction = predictions => {
+    return predictions.sort(
+        (prediction2, prediction1) =>
+            prediction1.probability - prediction2.probability
+    )[0];
+};
 async function predict() {
     // Prediction #1: run input through posenet
     // estimatePose can take in an image, video or canvas html element
     const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
     // Prediction 2: run input through teachable machine classification model
     const prediction = await model.predict(posenetOutput);
-
     for (let i = 0; i < maxPredictions; i++) {
         const classPrediction =
             prediction[i].className +
@@ -72,3 +78,21 @@ function drawPose(pose) {
         }
     }
 }
+
+export const PosePredictor = () => {
+    const handleStart = () => {
+        init();
+    };
+
+    return (
+        <div>
+            <button type="button" onClick={handleStart}>
+                Start
+            </button>
+            <div>
+                <canvas id="canvas"></canvas>
+            </div>
+            <div id="label-container"></div>
+        </div>
+    );
+};
