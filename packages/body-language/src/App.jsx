@@ -1,6 +1,8 @@
 import React from 'react';
 import './App.css';
 
+import { NinjaContextProvider } from './NinjaContext';
+
 import { PosePredictor } from './pose/PosePredictor';
 import { Code } from './code/Code';
 import {
@@ -30,8 +32,10 @@ const instructions = [
 function App() {
     return (
         <div className="App">
-            <PosePredictor />
-            <Code instructions={instructions} />
+            <NinjaContextProvider initialValue={instructions}>
+                <PosePredictor />
+                <Code />
+            </NinjaContextProvider>
         </div>
     );
 }

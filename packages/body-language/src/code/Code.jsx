@@ -1,10 +1,12 @@
 import React from 'react';
 import './Code.css';
 
+import { useNinjaContext } from '../NinjaContext';
 import { translate } from './translateToJS';
 
-export function Code({ instructions }) {
-    const convertedCode = translate(instructions);
+export function Code() {
+    const { predictions } = useNinjaContext();
+    const convertedCode = translate(predictions);
 
     const handleExecute = () => {
         console.log('Executing Ninja Code:');
