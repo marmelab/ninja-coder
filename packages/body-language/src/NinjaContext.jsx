@@ -10,7 +10,11 @@ export const NinjaContextProvider = ({ children, initialValue = [] }) => {
         setPredictions([...predictions, { ...prediction }]);
     };
 
-    const value = { predictions, pushPrediction };
+    const resetPredictions = () => {
+        setPredictions(initialValue);
+    };
+
+    const value = { predictions, pushPrediction, resetPredictions };
 
     return (
         <NinjaContext.Provider value={value}>{children}</NinjaContext.Provider>
