@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // More API functions here:
 // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
 
@@ -16,7 +16,45 @@ const getBestPrediction = predictions => {
 };
 
 export const PosePredictor = () => {
-    const [bestPrediction, setBestPrediction] = useState();
+    const [prediction, setPrediction] = useState(null);
+    const [afterPrediction, setAfterPrediction] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [savedPredictions, setSavedPredictions] = useState([]);
+
+    useEffect(() => {
+        if (prediction == null || loading) {
+            return;
+        }
+        setLoading(true);
+
+        setTimeout(() => {
+            console.log('Checking Prediction', prediction);
+            console.log('Checking Picked Prediction', afterPrediction);
+
+            if (
+                prediction != null &&
+                afterPrediction != null &&
+                prediction.probability > 0.9 &&
+                afterPrediction.probability > 0.9 &&
+                prediction.className === afterPrediction.className
+            ) {
+                setSavedPredictions([
+                    ...savedPredictions,
+                    { ...afterPrediction },
+                ]);
+            }
+
+            setLoading(false);
+        }, 2000);
+    }, [prediction]);
+
+    useEffect(() => {
+        if (loading === true) {
+            setAfterPrediction({ ...prediction });
+        } else {
+            setAfterPrediction(null);
+        }
+    }, [loading]);
 
     const init = async () => {
         // load the model and metadata
@@ -54,10 +92,7 @@ export const PosePredictor = () => {
         const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
         // Prediction 2: run input through teachable machine classification model
         const predictions = await model.predict(posenetOutput);
-        const prediction = getBestPrediction(predictions);
-        setBestPrediction(
-            `${prediction.className} - ${prediction.probability}`
-        );
+        setPrediction(getBestPrediction(predictions));
         // finally draw the poses
         drawPose(pose);
     };
@@ -86,7 +121,16 @@ export const PosePredictor = () => {
             <div>
                 <canvas width={size} height={size} id="canvas"></canvas>
             </div>
-            <div id="label-container">{bestPrediction}</div>
+            <div id="label-container">
+                {prediction
+                    ? `${prediction.className}(${prediction.probability})`
+                    : ''}
+            </div>
+            <ul>
+                {savedPredictions.map((savedPrediction, index) => {
+                    return <li key={index}>{savedPrediction.className}</li>;
+                })}
+            </ul>
         </div>
     );
 };
