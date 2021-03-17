@@ -1,0 +1,14 @@
+// Keywords
+
+export const KEYWORD_CONSOLE = 'KEYWORD_CONSOLE';
+export const KEYWORD_LOG = 'KEYWORD_LOG';
+
+// Syntax
+export const SYNTAX_DOT = 'SYNTAX_DOT';
+export const SYNTAX_LEFT_BRACKET = 'SYNTAX_LEFT_BRACKET';
+export const SYNTAX_RIGHT_BRACKET = 'SYNTAX_RIGHT_BRACKET';
+export const SYNTAX_STRING = 'SYNTAX_STRING';
+export const SYNTAX_SEMICOLON = 'SYNTAX_SEMICOLON';
+
+// Text
+export const TEXT_COUCOU = 'TEXT_COUCOU';
