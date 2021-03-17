@@ -6,7 +6,10 @@ import { translate } from './translateToJS';
 
 export function Code() {
     const { predictions } = useNinjaContext();
-    const convertedCode = translate(predictions);
+
+    const convertedCode = translate(
+        predictions.map(prediction => prediction.className)
+    );
 
     const handleExecute = () => {
         console.log('Executing Ninja Code:');
