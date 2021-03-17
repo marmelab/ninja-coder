@@ -1,0 +1,15 @@
+{
+  "name": "ninja-coder",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "repository": "git@github.com:Luwangel/ninja-coder.git",
+  "author": "Luwangel <adrien.amoros@gmail.com>",
+  "scripts": {
+    "dev": "cd packages/body-language && yarn run dev",
+    "build": "cd packages/body-language && yarn run build"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}
