@@ -2,17 +2,18 @@
 // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
 
 // the link to your model provided by Teachable Machine export panel
-import modelFile from '../models/model.json';
-import metadata from '../models/metadata.json';
 let model, webcam, ctx, labelContainer, maxPredictions;
 
 import * as tmPose from '@teachablemachine/pose';
 
-async function init() {
+export async function init() {
     // load the model and metadata
     // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
     // Note: the pose library adds a tmPose object to your window (window.tmPose)
-    model = await tmPose.load(modelFile, metadata);
+    model = await tmPose.load(
+        '../models/model.json',
+        '../models/metadata.json'
+    );
     maxPredictions = model.getTotalClasses();
 
     // Convenience function to setup a webcam
