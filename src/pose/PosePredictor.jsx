@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
+import * as tmPose from '@teachablemachine/pose';
 
 import { useNinjaContext } from '../NinjaContext';
 import { Canvas, useCanvas } from './Canvas';
+import { useWebcam } from './Webcam';
 
 // More API functions here:
 // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
 
 // the link to your model provided by Teachable Machine export panel
 
-import * as tmPose from '@teachablemachine/pose';
 const size = 500;
 
 const getBestPrediction = (predictions) => {
@@ -22,10 +23,10 @@ export const PosePredictor = () => {
 
     const [loading, setLoading] = useState(false);
     const [prediction, setPrediction] = useState(null);
-    const [webcam, setWebcam] = useState(null);
 
     const previousPredictionRef = useRef();
     const { canvasRef, canvasCtx, canvasDraw } = useCanvas();
+    const { webcam, isRunning, startWebcam, stopWebcam } = useWebcam();
 
     useEffect(() => {
         if (
@@ -58,16 +59,6 @@ export const PosePredictor = () => {
     useEffect(() => {
         previousPredictionRef.current = prediction;
     }, [prediction]);
-
-    const init = async () => {
-        const flip = true; // whether to flip the webcam
-
-        const tmPoseWebcam = new tmPose.Webcam(size, size, flip); // width, height, flip
-        await tmPoseWebcam.setup(); // request access to the webcam
-        await tmPoseWebcam.play();
-
-        setWebcam(tmPoseWebcam);
-    };
 
     const loop = async () => {
         webcam.update(); // update the webcam frame
@@ -113,14 +104,18 @@ export const PosePredictor = () => {
         }
     };
 
-    const handleStart = () => {
-        init();
+    const handleToggleWebcam = async () => {
+        if (isRunning) {
+            await stopWebcam();
+        } else {
+            await startWebcam();
+        }
     };
 
     return (
         <div>
-            <button type="button" onClick={handleStart}>
-                Start
+            <button type="button" onClick={handleToggleWebcam}>
+                {!isRunning ? 'Start' : 'Stop'}
             </button>
             <div>
                 <Canvas ref={canvasRef} width={size} height={size} />
