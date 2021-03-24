@@ -6,16 +6,14 @@ import { useNinjaContext } from '../NinjaContext';
 // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
 
 // the link to your model provided by Teachable Machine export panel
-let model, webcam, ctx, labelContainer, maxPredictions;
 
 import * as tmPose from '@teachablemachine/pose';
-const size = 200;
+const size = 500;
 
 const getBestPrediction = predictions => {
-    return predictions.sort(
-        (prediction2, prediction1) =>
-            prediction1.probability - prediction2.probability
-    )[0];
+    return predictions.sort((prediction2, prediction1) => {
+        return prediction1.probability - prediction2.probability;
+    })[0];
 };
 
 export const PosePredictor = () => {
@@ -24,6 +22,8 @@ export const PosePredictor = () => {
     const [loading, setLoading] = useState(false);
     const [prediction, setPrediction] = useState(null);
     const previousPredictionRef = useRef();
+
+    let model, webcam, ctx, labelContainer;
 
     useEffect(() => {
         if (
