@@ -1,4 +1,10 @@
-import { useRef } from 'react';
+import React, { forwardRef, useRef } from 'react';
+
+export const Canvas = forwardRef((props, ref) => {
+    return <canvas ref={ref} {...props}></canvas>;
+});
+
+Canvas.displayName = 'Canvas';
 
 export const useCanvas = (options = {}) => {
     const canvasRef = useRef(null);

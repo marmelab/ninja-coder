@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 
 import { useNinjaContext } from '../NinjaContext';
+import { Canvas, useCanvas } from './Canvas';
 
 // More API functions here:
 // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
@@ -10,7 +11,7 @@ import { useNinjaContext } from '../NinjaContext';
 import * as tmPose from '@teachablemachine/pose';
 const size = 500;
 
-const getBestPrediction = predictions => {
+const getBestPrediction = (predictions) => {
     return predictions.sort((prediction2, prediction1) => {
         return prediction1.probability - prediction2.probability;
     })[0];
@@ -21,9 +22,11 @@ export const PosePredictor = () => {
 
     const [loading, setLoading] = useState(false);
     const [prediction, setPrediction] = useState(null);
-    const previousPredictionRef = useRef();
+    const [webcam, setWebcam] = useState(null);
+    const [model, setModel] = useState(null);
 
-    let model, webcam, ctx, labelContainer;
+    const previousPredictionRef = useRef();
+    const { canvasRef, canvasCtx, canvasDraw } = useCanvas();
 
     useEffect(() => {
         if (
@@ -61,24 +64,19 @@ export const PosePredictor = () => {
         // load the model and metadata
         // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
         // Note: the pose library adds a tmPose object to your window (window.tmPose)
-        model = await tmPose.load(
+        const tmPoseModel = await tmPose.load(
             'public/models/model.json',
             'public/models/metadata.json'
         );
+        setModel(tmPoseModel);
 
         const flip = true; // whether to flip the webcam
 
-        webcam = new tmPose.Webcam(size, size, flip); // width, height, flip
-        await webcam.setup(); // request access to the webcam
-        await webcam.play();
-        window.requestAnimationFrame(loop);
+        const tmPoseWebcam = new tmPose.Webcam(size, size, flip); // width, height, flip
+        await tmPoseWebcam.setup(); // request access to the webcam
+        await tmPoseWebcam.play();
 
-        // append/get elements to the DOM
-        const canvas = document.getElementById('canvas');
-        canvas.width = size;
-        canvas.height = size;
-        ctx = canvas.getContext('2d');
-        labelContainer = document.getElementById('label-container');
+        setWebcam(tmPoseWebcam);
     };
 
     const loop = async () => {
@@ -86,6 +84,12 @@ export const PosePredictor = () => {
         await predict();
         window.requestAnimationFrame(loop);
     };
+
+    useEffect(() => {
+        if (webcam !== null) {
+            window.requestAnimationFrame(loop);
+        }
+    }, [webcam]);
 
     const predict = async () => {
         // Prediction #1: run input through posenet
@@ -98,14 +102,23 @@ export const PosePredictor = () => {
         drawPose(pose);
     };
 
-    const drawPose = pose => {
+    const drawPose = (pose) => {
         if (webcam.canvas) {
-            ctx.drawImage(webcam.canvas, 0, 0);
-            // draw the keypoints and skeleton
+            // Draw the webcam
+            canvasDraw(webcam.canvas, 0, 0);
+            // Draw the keypoints and skeleton
             if (pose) {
                 const minPartConfidence = 0.5;
-                tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
-                tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
+                tmPose.drawKeypoints(
+                    pose.keypoints,
+                    minPartConfidence,
+                    canvasCtx
+                );
+                tmPose.drawSkeleton(
+                    pose.keypoints,
+                    minPartConfidence,
+                    canvasCtx
+                );
             }
         }
     };
@@ -120,7 +133,7 @@ export const PosePredictor = () => {
                 Start
             </button>
             <div>
-                <canvas width={size} height={size} id="canvas"></canvas>
+                <Canvas ref={canvasRef} width={size} height={size} />
             </div>
             <div id="label-container">
                 {prediction
