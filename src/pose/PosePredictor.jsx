@@ -18,12 +18,11 @@ const getBestPrediction = (predictions) => {
 };
 
 export const PosePredictor = () => {
-    const { pushPrediction } = useNinjaContext();
+    const { model, pushPrediction } = useNinjaContext();
 
     const [loading, setLoading] = useState(false);
     const [prediction, setPrediction] = useState(null);
     const [webcam, setWebcam] = useState(null);
-    const [model, setModel] = useState(null);
 
     const previousPredictionRef = useRef();
     const { canvasRef, canvasCtx, canvasDraw } = useCanvas();
@@ -61,15 +60,6 @@ export const PosePredictor = () => {
     }, [prediction]);
 
     const init = async () => {
-        // load the model and metadata
-        // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
-        // Note: the pose library adds a tmPose object to your window (window.tmPose)
-        const tmPoseModel = await tmPose.load(
-            'public/models/model.json',
-            'public/models/metadata.json'
-        );
-        setModel(tmPoseModel);
-
         const flip = true; // whether to flip the webcam
 
         const tmPoseWebcam = new tmPose.Webcam(size, size, flip); // width, height, flip

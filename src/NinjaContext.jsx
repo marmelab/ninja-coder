@@ -1,20 +1,37 @@
-import React, { useState } from 'react';
-import { createContext, useContext } from 'react';
+import React, { useEffect, useState, createContext, useContext } from 'react';
+import * as tmPose from '@teachablemachine/pose';
 
 export const NinjaContext = createContext(undefined);
 
-export const NinjaContextProvider = ({ children, initialValue = [] }) => {
-    const [predictions, setPredictions] = useState(initialValue);
+export const NinjaContextProvider = ({
+    children,
+    initialPredictions = [],
+    modelPath = 'models/model.json',
+    metadataPath = 'models/metadata.json',
+}) => {
+    const [predictions, setPredictions] = useState(initialPredictions);
+    const [model, setModel] = useState(null);
 
-    const pushPrediction = prediction => {
+    const pushPrediction = (prediction) => {
         setPredictions([...predictions, { ...prediction }]);
     };
 
     const resetPredictions = () => {
-        setPredictions(initialValue);
+        setPredictions(initialPredictions);
     };
 
-    const value = { predictions, pushPrediction, resetPredictions };
+    useEffect(() => {
+        (async function () {
+            // load the model and metadata
+            // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+            // Note: the pose library adds a tmPose object to your window (window.tmPose)
+            const tmPoseModel = await tmPose.load(modelPath, metadataPath);
+
+            setModel(tmPoseModel);
+        })();
+    });
+
+    const value = { model, predictions, pushPrediction, resetPredictions };
 
     return (
         <NinjaContext.Provider value={value}>{children}</NinjaContext.Provider>

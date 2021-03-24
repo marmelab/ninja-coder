@@ -32,7 +32,7 @@ const instructions = [
 function App() {
     return (
         <div className="App">
-            <NinjaContextProvider initialValue={[]}>
+            <NinjaContextProvider>
                 <PosePredictor />
                 <Code />
             </NinjaContextProvider>
