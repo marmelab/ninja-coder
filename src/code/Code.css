@@ -31,7 +31,7 @@
 
 .Code-editor {
     box-sizing: border-box;
-    margin: 40px auto 0 auto;
+    margin: 5px 0px;
     width: 600px;
     text-align: left;
     background-color: #473431;
@@ -46,7 +46,7 @@
     color: #222;
     padding-top: 6px;
     text-align: center;
-    top: 25px;
+    top: 8px;
     width: 600px;
     height: 30px;
     background-color: #fafafa;
@@ -55,7 +55,7 @@
 
 .Code-editor span.Code-editor-control:before {
     content: '';
-    top: 34px;
+    top: 16px;
     z-index: 2;
     padding: 6px;
     border-radius: 20px;
@@ -113,19 +113,14 @@ pre[class*='language-'] {
     white-space: pre;
     word-spacing: normal;
 
-    -moz-tab-size: 4;
-    -o-tab-size: 4;
     tab-size: 4;
 
-    -webkit-hyphens: none;
-    -moz-hyphens: none;
-    -ms-hyphens: none;
     hyphens: none;
 }
 
 /* Code blocks */
 pre[class*='language-'] {
-    padding: 1em;
+    padding: calc(2em + 10px) 2em 2em 2em;
     margin: 0em 0;
     height: 500px;
     overflow: auto;
@@ -140,9 +135,6 @@ pre[class*='language-'] {
 :not(pre) > Code[class*='language-'] {
     padding: 0.1em;
     border-radius: 0.3em;
-    -moz-border-radius: 0.3em;
-    -o-border-radius: 0.3em;
-    -webkit-border-radius: 0.3em;
 }
 
 .token.comment,

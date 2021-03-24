@@ -4,3 +4,7 @@
     align-items: center;
     justify-content: center;
 }
+
+.Pose-canvas {
+    border-radius: 5px;
+}
