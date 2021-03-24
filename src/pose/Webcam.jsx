@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import * as tmPose from '@teachablemachine/pose';
 
-export const useWebcam = ({ width = 500, height = 500, flip = true } = {}) => {
+export const useWebcam = ({ width = 640, height = 640, flip = true } = {}) => {
     const [webcam, setWebcam] = useState(null);
 
     const startWebcam = async () => {

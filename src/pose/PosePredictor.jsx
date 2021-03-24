@@ -10,7 +10,8 @@ import { useWebcam } from './Webcam';
 
 // the link to your model provided by Teachable Machine export panel
 
-const size = 500;
+const width = 800;
+const height = 800;
 
 const getBestPrediction = (predictions) => {
     return predictions.sort((prediction2, prediction1) => {
@@ -66,7 +67,10 @@ export const PosePredictor = () => {
 
     const animationFrameIdRef = useRef();
     const { canvasRef, canvasCtx, canvasDraw } = useCanvas();
-    const { webcam, isRunning, startWebcam, stopWebcam } = useWebcam();
+    const { webcam, isRunning, startWebcam, stopWebcam } = useWebcam({
+        width,
+        height,
+    });
 
     const predict = async () => {
         // Prediction #1: run input through posenet
@@ -120,7 +124,7 @@ export const PosePredictor = () => {
         }
     };
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         draw(pose);
     }, [pose]);
 
@@ -138,7 +142,7 @@ export const PosePredictor = () => {
                 {!isRunning ? 'Start' : 'Stop'}
             </button>
             <div>
-                <Canvas ref={canvasRef} width={size} height={size} />
+                <Canvas ref={canvasRef} width={width} height={height} />
             </div>
             <div id="label-container">
                 {prediction
