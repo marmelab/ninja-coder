@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import Prism from 'prismjs';
+
 import './Code.css';
 
 import { useNinjaContext } from '../NinjaContext';
@@ -8,8 +10,12 @@ export function Code() {
     const { predictions, resetPredictions } = useNinjaContext();
 
     const convertedCode = translate(
-        predictions.map(prediction => prediction.className)
+        predictions.map((prediction) => prediction.className)
     );
+
+    useEffect(() => {
+        Prism.highlightAll();
+    }, [predictions]);
 
     const handleExecute = () => {
         console.log('Executing Ninja Code:');
@@ -22,7 +28,17 @@ export function Code() {
 
     return (
         <div className="Code">
-            <code className="Code-code">{convertedCode}</code>
+            <div className="Code-editor-container">
+                <div className="Code-editor">
+                    <span className="Code-editor-control"></span>
+                    <span className="Code-editor-control"></span>
+                    <span className="Code-editor-control"></span>
+                    <pre className="Code-editor-line-numbers">
+                        <code className="language-js">{convertedCode}</code>
+                    </pre>
+                </div>
+            </div>
+
             <button className="Code-button-try" onClick={handleExecute}>
                 Take the risk!
             </button>

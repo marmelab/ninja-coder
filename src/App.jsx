@@ -33,8 +33,10 @@ function App() {
     return (
         <div className="App">
             <NinjaContextProvider>
-                <PosePredictor />
-                <Code />
+                <div className="App-content">
+                    <PosePredictor />
+                    <Code />
+                </div>
             </NinjaContextProvider>
         </div>
     );

@@ -10,8 +10,8 @@ import { useWebcam } from './Webcam';
 
 // the link to your model provided by Teachable Machine export panel
 
-const width = 800;
-const height = 800;
+const width = 600;
+const height = 600;
 
 const getBestPrediction = (predictions) => {
     return predictions.sort((prediction2, prediction1) => {
@@ -137,7 +137,7 @@ export const PosePredictor = () => {
     };
 
     return (
-        <div>
+        <div className="Pose">
             <button type="button" onClick={handleToggleWebcam}>
                 {!isRunning ? 'Start' : 'Stop'}
             </button>
