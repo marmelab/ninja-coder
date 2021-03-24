@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useState, useRef } from 'react';
 import * as tmPose from '@teachablemachine/pose';
 
 import { useNinjaContext } from '../NinjaContext';
@@ -18,16 +18,13 @@ const getBestPrediction = (predictions) => {
     })[0];
 };
 
-export const PosePredictor = () => {
-    const { model, pushPrediction } = useNinjaContext();
+const usePredictions = () => {
+    const { pushPrediction } = useNinjaContext();
 
     const [loading, setLoading] = useState(false);
-    const [prediction, setPrediction] = useState(null);
-    const [pose, setPose] = useState(null);
-
     const previousPredictionRef = useRef();
-    const { canvasRef, canvasCtx, canvasDraw } = useCanvas();
-    const { webcam, isRunning, startWebcam, stopWebcam } = useWebcam();
+
+    const [prediction, setPrediction] = useState(null);
 
     useEffect(() => {
         if (
@@ -39,12 +36,6 @@ export const PosePredictor = () => {
         setLoading(true);
 
         setTimeout(() => {
-            console.log('Checking Prediction', prediction);
-            console.log(
-                'Checking Picked Prediction',
-                previousPredictionRef.current
-            );
-
             if (
                 prediction != null &&
                 previousPredictionRef.current != null &&
@@ -61,20 +52,21 @@ export const PosePredictor = () => {
         previousPredictionRef.current = prediction;
     }, [prediction]);
 
-    const loop = async () => {
-        webcam.update(); // update the webcam frame
-        await predict();
-        window.requestAnimationFrame(loop);
+    return {
+        currentPrediction: prediction,
+        saveCurrentPrediction: setPrediction,
     };
+};
 
-    useEffect(() => {
-        if (webcam !== null) {
-            if (!isRunning) {
-                startWebcam();
-            }
-            window.requestAnimationFrame(loop);
-        }
-    }, [webcam]);
+export const PosePredictor = () => {
+    const { model } = useNinjaContext();
+    const { prediction, saveCurrentPrediction } = usePredictions();
+
+    const [pose, setPose] = useState(null);
+
+    const animationFrameIdRef = useRef();
+    const { canvasRef, canvasCtx, canvasDraw } = useCanvas();
+    const { webcam, isRunning, startWebcam, stopWebcam } = useWebcam();
 
     const predict = async () => {
         // Prediction #1: run input through posenet
@@ -82,11 +74,39 @@ export const PosePredictor = () => {
         const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
         // Prediction 2: run input through teachable machine classification model
         const predictions = await model.predict(posenetOutput);
-        setPrediction(getBestPrediction(predictions));
+        const bestPrediction = getBestPrediction(predictions);
+        saveCurrentPrediction(bestPrediction);
         setPose(pose);
     };
 
-    const drawPose = (pose) => {
+    const loop = async () => {
+        await webcam.update(); // update the webcam frame
+        await predict();
+
+        if (!animationFrameIdRef.current) {
+            return;
+        }
+        animationFrameIdRef.current = window.requestAnimationFrame(loop);
+    };
+
+    useEffect(() => {
+        if (!model) {
+            return;
+        }
+
+        if (isRunning) {
+            animationFrameIdRef.current = requestAnimationFrame(loop);
+        } else {
+            window.cancelAnimationFrame(animationFrameIdRef.current);
+            animationFrameIdRef.current = null;
+        }
+        return () => {
+            window.cancelAnimationFrame(animationFrameIdRef.current);
+            animationFrameIdRef.current = null;
+        };
+    }, [model, isRunning]);
+
+    const draw = (pose) => {
         if (!webcam || !webcam.canvas) {
             return;
         }
@@ -101,8 +121,7 @@ export const PosePredictor = () => {
     };
 
     useEffect(() => {
-        // Draw the poses
-        drawPose(pose);
+        draw(pose);
     }, [pose]);
 
     const handleToggleWebcam = async () => {
