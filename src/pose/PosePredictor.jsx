@@ -1,5 +1,13 @@
-import React, { useEffect, useLayoutEffect, useState, useRef } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useState,
+    useRef,
+} from 'react';
 import * as tmPose from '@teachablemachine/pose';
+
+import './Pose.css';
 
 import { useNinjaContext } from '../NinjaContext';
 import { Canvas, useCanvas } from './Canvas';
@@ -39,6 +47,7 @@ const usePredictions = () => {
         setTimeout(() => {
             if (
                 prediction != null &&
+                prediction.probability > 0.9 &&
                 previousPredictionRef.current != null &&
                 prediction.className === previousPredictionRef.current.className
             ) {
@@ -49,25 +58,35 @@ const usePredictions = () => {
         }, 2000);
     }, [prediction]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
+        if (prediction) {
+            console.log(
+                `Guessing prediction: ${prediction.className}(${prediction.probability})`
+            );
+        }
+
         previousPredictionRef.current = prediction;
     }, [prediction]);
 
+    const saveCurrentPrediction = useCallback((prediction) => {
+        setPrediction(prediction);
+    });
+
     return {
         currentPrediction: prediction,
-        saveCurrentPrediction: setPrediction,
+        saveCurrentPrediction,
     };
 };
 
 export const PosePredictor = () => {
     const { model } = useNinjaContext();
-    const { prediction, saveCurrentPrediction } = usePredictions();
+    const { saveCurrentPrediction } = usePredictions();
 
     const [pose, setPose] = useState(null);
 
     const animationFrameIdRef = useRef();
     const { canvasRef, canvasCtx, canvasDraw } = useCanvas();
-    const { webcam, isRunning, startWebcam, stopWebcam } = useWebcam({
+    const { webcam, isRunning, startWebcam } = useWebcam({
         width,
         height,
     });
@@ -128,27 +147,20 @@ export const PosePredictor = () => {
         draw(pose);
     }, [pose]);
 
-    const handleToggleWebcam = async () => {
-        if (isRunning) {
-            await stopWebcam();
-        } else {
-            await startWebcam();
+    useEffect(() => {
+        if (!isRunning) {
+            startWebcam();
         }
-    };
+    }, []);
 
     return (
         <div className="Pose">
-            <button type="button" onClick={handleToggleWebcam}>
-                {!isRunning ? 'Start' : 'Stop'}
-            </button>
-            <div>
-                <Canvas ref={canvasRef} width={width} height={height} />
-            </div>
-            <div id="label-container">
-                {prediction
-                    ? `${prediction.className}(${prediction.probability})`
-                    : ''}
-            </div>
+            <Canvas
+                className="Pose-canvas"
+                ref={canvasRef}
+                width={width}
+                height={height}
+            />
         </div>
     );
 };
