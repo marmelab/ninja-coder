@@ -23,6 +23,7 @@ export const PosePredictor = () => {
 
     const [loading, setLoading] = useState(false);
     const [prediction, setPrediction] = useState(null);
+    const [pose, setPose] = useState(null);
 
     const previousPredictionRef = useRef();
     const { canvasRef, canvasCtx, canvasDraw } = useCanvas();
@@ -68,6 +69,9 @@ export const PosePredictor = () => {
 
     useEffect(() => {
         if (webcam !== null) {
+            if (!isRunning) {
+                startWebcam();
+            }
             window.requestAnimationFrame(loop);
         }
     }, [webcam]);
@@ -79,30 +83,27 @@ export const PosePredictor = () => {
         // Prediction 2: run input through teachable machine classification model
         const predictions = await model.predict(posenetOutput);
         setPrediction(getBestPrediction(predictions));
-        // finally draw the poses
-        drawPose(pose);
+        setPose(pose);
     };
 
     const drawPose = (pose) => {
-        if (webcam.canvas) {
-            // Draw the webcam
-            canvasDraw(webcam.canvas, 0, 0);
-            // Draw the keypoints and skeleton
-            if (pose) {
-                const minPartConfidence = 0.5;
-                tmPose.drawKeypoints(
-                    pose.keypoints,
-                    minPartConfidence,
-                    canvasCtx
-                );
-                tmPose.drawSkeleton(
-                    pose.keypoints,
-                    minPartConfidence,
-                    canvasCtx
-                );
-            }
+        if (!webcam || !webcam.canvas) {
+            return;
+        }
+        // Draw the webcam
+        canvasDraw(webcam.canvas, 0, 0);
+        // Draw the keypoints and skeleton
+        if (pose) {
+            const minPartConfidence = 0.5;
+            tmPose.drawKeypoints(pose.keypoints, minPartConfidence, canvasCtx);
+            tmPose.drawSkeleton(pose.keypoints, minPartConfidence, canvasCtx);
         }
     };
+
+    useEffect(() => {
+        // Draw the poses
+        drawPose(pose);
+    }, [pose]);
 
     const handleToggleWebcam = async () => {
         if (isRunning) {
