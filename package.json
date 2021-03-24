@@ -1,24 +1,29 @@
 {
-  "name": "ninja-coder",
-  "version": "1.0.0",
-  "private": true,
-  "license": "MIT",
-  "repository": "git@github.com:Luwangel/ninja-coder.git",
-  "author": "Luwangel <adrien.amoros@gmail.com>",
-  "scripts": {
-    "dev": "cd packages/body-language && yarn run dev",
-    "build": "cd packages/body-language && yarn run build"
-  },
-  "workspaces": [
-    "packages/*"
-  ],
-  "devDependencies": {
-    "eslint": "~7.22.0",
-    "eslint-config-prettier": "~8.1.0",
-    "eslint-plugin-import": "~2.22.1",
-    "eslint-plugin-jsx-a11y": "~6.4.1",
-    "eslint-plugin-prettier": "~3.3.1",
-    "eslint-plugin-react": "~7.22.0",
-    "prettier": "~2.2.1"
-  }
+    "name": "ninja-coder",
+    "version": "1.0.0",
+    "license": "MIT",
+    "repository": "git@github.com:Luwangel/ninja-coder.git",
+    "author": "Luwangel <adrien.amoros@gmail.com>",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "serve": "vite preview"
+    },
+    "dependencies": {
+        "@teachablemachine/pose": "~0.8.6",
+        "@tensorflow/tfjs": "~3.3.0",
+        "react": "~17.0.1",
+        "react-dom": "~17.0.1"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-react-refresh": "~1.3.1",
+        "eslint": "~7.22.0",
+        "eslint-config-prettier": "~8.1.0",
+        "eslint-plugin-import": "~2.22.1",
+        "eslint-plugin-jsx-a11y": "~6.4.1",
+        "eslint-plugin-prettier": "~3.3.1",
+        "eslint-plugin-react": "~7.22.0",
+        "prettier": "~2.2.1",
+        "vite": "~2.1.1"
+    }
 }

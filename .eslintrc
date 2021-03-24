@@ -1,7 +1,8 @@
 {
     "env": {
         "es2020": true,
-        "node": true
+        "node": true,
+        "browser": true
     },
     "parserOptions": {
         "sourceType": "module",
@@ -11,9 +12,10 @@
         "eslint:recommended",
         "plugin:import/errors",
         "plugin:import/warnings",
+        "plugin:react/recommended",
         "prettier"
     ],
-    "plugins": ["prettier"],
+    "plugins": ["react", "prettier"],
     "rules": {
         "prettier/prettier": [
             "error",
@@ -23,7 +25,15 @@
                 "trailingComma": "es5"
             }
         ],
+        "import/resolver": {
+            "node": {
+                "extensions": [".js", ".jsx"]
+            }
+        },
         "import/no-extraneous-dependencies": "off",
-        "no-console": ["error", { "allow": ["warn", "error"] }]
+        "no-console": ["error", { "allow": ["warn", "error"] }],
+        "no-unused-vars": ["error", { "ignoreRestSiblings": true }],
+        "react/no-deprecated": "off",
+        "react/prop-types": "off"
     }
 }
