@@ -70,6 +70,7 @@ const usePredictions = () => {
     };
 };
 
+// eslint-disable-next-line react/display-name
 const WebcamCanvas = React.memo(({ webcam }) => {
     return (
         <div
@@ -82,7 +83,6 @@ export const PosePredictor = () => {
     const { model } = useNinjaContext();
     const { saveCurrentPrediction } = usePredictions();
 
-    const animationFrameIdRef = useRef();
     const { webcam, isRunning, startWebcam } = useWebcam({
         width,
         height,
@@ -98,38 +98,24 @@ export const PosePredictor = () => {
         saveCurrentPrediction(bestPrediction);
     };
 
-    const loop = async () => {
-        await webcam.update(); // update the webcam frame
-        await predict();
-
-        if (!animationFrameIdRef.current) {
-            return;
-        }
-        animationFrameIdRef.current = window.requestAnimationFrame(loop);
+    const loop = () => {
+        setInterval(async () => {
+            await webcam.update(); // update the webcam frame
+            await predict();
+        }, 16);
     };
 
-    useEffect(() => {
-        if (!model) {
-            return;
-        }
-
-        if (isRunning) {
-            animationFrameIdRef.current = requestAnimationFrame(loop);
-        } else {
-            window.cancelAnimationFrame(animationFrameIdRef.current);
-            animationFrameIdRef.current = null;
-        }
-        return () => {
-            window.cancelAnimationFrame(animationFrameIdRef.current);
-            animationFrameIdRef.current = null;
-        };
-    }, [model, isRunning]);
-
-    useEffect(() => {
+    useEffect(async () => {
         if (!isRunning) {
-            startWebcam();
+            await startWebcam();
         }
-    }, []);
+    }, [isRunning]);
+
+    useEffect(async () => {
+        if (webcam) {
+            loop();
+        }
+    }, [webcam]);
 
     return <WebcamCanvas webcam={webcam} />;
 };

@@ -8,7 +8,6 @@ export const useWebcam = ({ width = 640, height = 640, flip = true } = {}) => {
         const tmPoseWebcam = new tmPose.Webcam(width, height, flip); // width, height, flip
         await tmPoseWebcam.setup(); // request access to the webcam
         await tmPoseWebcam.play();
-
         setWebcam(tmPoseWebcam);
     };
 
