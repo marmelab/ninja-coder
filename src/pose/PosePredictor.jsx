@@ -98,13 +98,6 @@ export const PosePredictor = () => {
         saveCurrentPrediction(bestPrediction);
     };
 
-    const loop = () => {
-        setInterval(async () => {
-            await webcam.update(); // update the webcam frame
-            await predict();
-        }, 16);
-    };
-
     useEffect(async () => {
         if (!isRunning) {
             await startWebcam();
@@ -113,7 +106,12 @@ export const PosePredictor = () => {
 
     useEffect(async () => {
         if (webcam) {
-            loop();
+            setInterval(async () => {
+                await webcam.update(); // update the webcam frame
+            }, 16);
+            setInterval(async () => {
+                await predict();
+            }, 500);
         }
     }, [webcam]);
 
