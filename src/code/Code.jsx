@@ -18,7 +18,6 @@ export function Code() {
     }, [predictions]);
 
     const handleExecute = () => {
-        console.log('Executing Ninja Code:');
         eval(convertedCode);
     };
 
