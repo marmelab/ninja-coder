@@ -1,0 +1,27 @@
+.Letter {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    width: 100vw;
+    height: 100vh;
+    font-size: 300px;
+    color: #fff;
+    background: #000000e3;
+    animation: bg 0.2s;
+}
+
+@keyframes bg {
+    from {
+        color: rgba(255, 255, 255, 0);
+        background: #0000003b;
+    }
+    to {
+        color: #fff;
+        background: #000000e3;
+    }
+}

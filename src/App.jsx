@@ -5,6 +5,7 @@ import { NinjaContextProvider } from './NinjaContext';
 
 import { PosePredictor } from './pose/PosePredictor';
 import { Code } from './code/Code';
+import { Letter } from './code/Letter';
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
                 <div className="App-content">
                     <PosePredictor />
                     <Code />
+                    <Letter />
                 </div>
             </NinjaContextProvider>
         </div>
