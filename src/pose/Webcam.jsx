@@ -1,5 +1,16 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import * as tmPose from '@teachablemachine/pose';
+
+const Webcam = ({ webcam }) => {
+    return (
+        <div
+            className="Pose"
+            ref={(ref) => ref && webcam && ref.appendChild(webcam.canvas)}
+        />
+    );
+};
+
+export default React.memo(Webcam);
 
 export const useWebcam = ({ width = 640, height = 640, flip = true } = {}) => {
     const [webcam, setWebcam] = useState(null);

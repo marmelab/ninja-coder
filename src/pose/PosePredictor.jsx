@@ -9,15 +9,49 @@ import React, {
 import './Pose.css';
 
 import { useNinjaContext } from '../NinjaContext';
-import { useWebcam } from './Webcam';
-
-// More API functions here:
-// https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
-
-// the link to your model provided by Teachable Machine export panel
+import Webcam, { useWebcam } from './Webcam';
 
 const width = 600;
 const height = 600;
+
+export const PosePredictor = () => {
+    const { model } = useNinjaContext();
+    const { saveCurrentPrediction } = usePredictions();
+
+    const { webcam, isRunning, startWebcam } = useWebcam({
+        width,
+        height,
+    });
+
+    const predict = async () => {
+        // Prediction #1: run input through posenet
+        // estimatePose can take in an image, video or canvas html element
+        const { posenetOutput } = await model.estimatePose(webcam.canvas);
+        // Prediction 2: run input through teachable machine classification model
+        const predictions = await model.predict(posenetOutput);
+        const bestPrediction = getBestPrediction(predictions);
+        saveCurrentPrediction(bestPrediction);
+    };
+
+    useEffect(async () => {
+        if (!isRunning) {
+            await startWebcam();
+        }
+    }, [isRunning]);
+
+    useEffect(async () => {
+        if (webcam) {
+            setInterval(async () => {
+                await webcam.update(); // update the webcam frame
+            }, 16);
+            setInterval(async () => {
+                await predict();
+            }, 500);
+        }
+    }, [webcam]);
+
+    return <Webcam webcam={webcam} />;
+};
 
 const getBestPrediction = (predictions) => {
     return predictions.sort((prediction2, prediction1) => {
@@ -68,52 +102,4 @@ const usePredictions = () => {
         currentPrediction: prediction,
         saveCurrentPrediction,
     };
-};
-
-// eslint-disable-next-line react/display-name
-const WebcamCanvas = React.memo(({ webcam }) => {
-    return (
-        <div
-            className="Pose"
-            ref={(ref) => ref && webcam && ref.appendChild(webcam.canvas)}
-        ></div>
-    );
-});
-export const PosePredictor = () => {
-    const { model } = useNinjaContext();
-    const { saveCurrentPrediction } = usePredictions();
-
-    const { webcam, isRunning, startWebcam } = useWebcam({
-        width,
-        height,
-    });
-
-    const predict = async () => {
-        // Prediction #1: run input through posenet
-        // estimatePose can take in an image, video or canvas html element
-        const { posenetOutput } = await model.estimatePose(webcam.canvas);
-        // Prediction 2: run input through teachable machine classification model
-        const predictions = await model.predict(posenetOutput);
-        const bestPrediction = getBestPrediction(predictions);
-        saveCurrentPrediction(bestPrediction);
-    };
-
-    useEffect(async () => {
-        if (!isRunning) {
-            await startWebcam();
-        }
-    }, [isRunning]);
-
-    useEffect(async () => {
-        if (webcam) {
-            setInterval(async () => {
-                await webcam.update(); // update the webcam frame
-            }, 16);
-            setInterval(async () => {
-                await predict();
-            }, 500);
-        }
-    }, [webcam]);
-
-    return <WebcamCanvas webcam={webcam} />;
 };
