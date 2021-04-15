@@ -10,7 +10,10 @@ import { Letter } from './code/Letter';
 function App() {
     return (
         <div className="App">
-            <NinjaContextProvider>
+            <NinjaContextProvider
+                modelPath="models/v2/model.json"
+                metadataPath="models/v2/metadata.json"
+            >
                 <div className="App-content">
                     <PosePredictor />
                     <Code />
