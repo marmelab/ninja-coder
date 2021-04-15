@@ -13,6 +13,15 @@ export const NinjaContextProvider = ({
     const [model, setModel] = useState(null);
 
     const pushPrediction = (prediction) => {
+        if (!prediction) {
+            return;
+        }
+        if (
+            predictions[predictions.length - 1] &&
+            predictions[predictions.length - 1].className ===
+                prediction.className
+        )
+            return;
         setPredictions([...predictions, { ...prediction }]);
     };
 

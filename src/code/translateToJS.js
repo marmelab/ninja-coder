@@ -5,6 +5,7 @@ import {
     SYNTAX_LEFT_BRACKET,
     SYNTAX_RIGHT_BRACKET,
     SYNTAX_SEMICOLON,
+    SYNTAX_SEMICOLON_2,
     SYNTAX_STRING,
     TEXT_COUCOU,
 } from './symbolsJS';
@@ -26,7 +27,7 @@ export function translateOneIntruction(instruction) {
             return ')';
         case SYNTAX_STRING:
             return "'";
-        case SYNTAX_SEMICOLON:
+        case SYNTAX_SEMICOLON_2:
             return ';';
 
         // Text

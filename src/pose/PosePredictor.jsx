@@ -24,9 +24,6 @@ export const PosePredictor = () => {
     });
 
     const predict = async () => {
-        if (!model) {
-            return;
-        }
         // Prediction #1: run input through posenet
         // estimatePose can take in an image, video or canvas html element
         const { posenetOutput } = await model.estimatePose(webcam.canvas);
@@ -43,15 +40,17 @@ export const PosePredictor = () => {
     }, [isRunning]);
 
     useEffect(async () => {
-        if (webcam) {
-            setInterval(async () => {
-                await webcam.update(); // update the webcam frame
-            }, 16);
-            setInterval(async () => {
-                await predict();
-            }, 500);
-        }
+        setInterval(async () => {
+            if (!webcam) return;
+            await webcam.update(); // update the webcam frame
+        }, 16);
     }, [webcam]);
+    useEffect(() => {
+        if (!model) return;
+        setInterval(async () => {
+            await predict();
+        }, 1000);
+    }, [model]);
 
     return <Webcam webcam={webcam} />;
 };
@@ -98,6 +97,7 @@ const usePredictions = () => {
     }, [prediction]);
 
     const saveCurrentPrediction = useCallback((prediction) => {
+        console.log('saveCurrentPrediction', prediction.className);
         setPrediction(prediction);
     });
 
