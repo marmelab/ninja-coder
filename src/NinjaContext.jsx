@@ -29,7 +29,7 @@ export const NinjaContextProvider = ({
 
             setModel(tmPoseModel);
         })();
-    });
+    }, []);
 
     const value = { model, predictions, pushPrediction, resetPredictions };
 
