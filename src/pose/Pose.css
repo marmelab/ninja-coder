@@ -6,6 +6,11 @@
     padding-top: 25px;
 }
 
-.Pose-canvas {
+.Pose {
+    min-height: 600px;
+    min-width: 600px;
+}
+
+.Pose > canvas {
     border-radius: 5px;
 }

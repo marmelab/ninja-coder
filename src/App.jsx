@@ -9,18 +9,20 @@ import { Letter } from './code/Letter';
 
 function App() {
     return (
-        <div className="App">
-            <NinjaContextProvider
-                modelPath="models/v3/model.json"
-                metadataPath="models/v3/metadata.json"
-            >
-                <div className="App-content">
-                    <PosePredictor />
-                    <Code />
-                    <Letter />
+        <NinjaContextProvider
+            modelPath="models/v3/model.json"
+            metadataPath="models/v3/metadata.json"
+        >
+            <div className="App">
+                <div className="App-layout">
+                    <div className="App-content">
+                        <PosePredictor />
+                        <Code />
+                    </div>
                 </div>
-            </NinjaContextProvider>
-        </div>
+                <Letter />
+            </div>
+        </NinjaContextProvider>
     );
 }
 

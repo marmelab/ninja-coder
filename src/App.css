@@ -3,13 +3,13 @@
     min-height: 100vh;
 }
 
+.App-layout {
+    padding: 100px 70px 0px 75px;
+}
+
 .App-content {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     justify-content: center;
-}
-
-button {
-    font-size: calc(10px + 2vmin);
 }
