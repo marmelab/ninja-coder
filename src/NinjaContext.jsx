@@ -1,6 +1,6 @@
 import React, { useEffect, useState, createContext, useContext } from 'react';
 import * as tmPose from '@teachablemachine/pose';
-import { START } from './code/symbolsJS';
+import { ACTION_START, ACTION_EXECUTE } from './code/symbolsJS';
 
 export const NinjaContext = createContext(undefined);
 
@@ -19,15 +19,22 @@ export const NinjaContextProvider = ({
             return;
         }
 
-        if (prediction.className === START) {
+        if (prediction.className === ACTION_START) {
             setStarted(true);
             return;
         }
 
+        if (prediction.className === ACTION_EXECUTE) {
+            setStarted(false);
+            return;
+        }
+
+        // Don't save predictions if not started
         if (!started) {
             return;
         }
 
+        // Don't add two times the same prediction
         if (
             predictions[predictions.length - 1] &&
             predictions[predictions.length - 1].className ===
