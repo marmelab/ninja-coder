@@ -24,6 +24,10 @@ export const PosePredictor = () => {
     });
 
     const predict = async () => {
+        if (!webcam) {
+            return;
+        }
+
         // Prediction #1: run input through posenet
         // estimatePose can take in an image, video or canvas html element
         const { posenetOutput } = await model.estimatePose(webcam.canvas);
