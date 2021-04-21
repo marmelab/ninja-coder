@@ -15,23 +15,27 @@ export const NinjaContextProvider = ({
     const [started, setStarted] = useState(false);
 
     const pushPrediction = (prediction) => {
-        console.log('push prediction', prediction.className);
         if (!prediction) {
             return;
         }
+
         if (prediction.className === START) {
             setStarted(true);
             return;
         }
+
         if (!started) {
             return;
         }
+
         if (
             predictions[predictions.length - 1] &&
             predictions[predictions.length - 1].className ===
                 prediction.className
-        )
+        ) {
             return;
+        }
+
         setPredictions([...predictions, { ...prediction }]);
     };
 
@@ -40,11 +44,8 @@ export const NinjaContextProvider = ({
     };
 
     useEffect(() => {
-        if (started) console.log('LET START');
-    }, [started]);
-    useEffect(() => {
         (async function () {
-            // load the model and metadata
+            // Load the model and metadata
             // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
             // Note: the pose library adds a tmPose object to your window (window.tmPose)
             const tmPoseModel = await tmPose.load(modelPath, metadataPath);
