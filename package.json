@@ -4,6 +4,10 @@
     "license": "MIT",
     "repository": "git@github.com:Luwangel/ninja-coder.git",
     "author": "Luwangel <adrien.amoros@gmail.com>",
+    "contributors": [
+        "Luwangel <adrien.amoros@gmail.com>",
+        "Guilbill <guilbill@gmail.com>"
+    ],
     "scripts": {
         "dev": "vite serve",
         "build": "vite build",
