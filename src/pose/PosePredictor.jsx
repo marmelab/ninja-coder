@@ -40,14 +40,19 @@ export const PosePredictor = () => {
     }, [isRunning]);
 
     useEffect(async () => {
-        if (!webcam) return;
+        if (!webcam) {
+            return;
+        }
         setInterval(async () => {
-            await webcam.update(); // update the webcam frame
+            await webcam.update(); // Update the webcam frame
         }, 16);
     }, [webcam]);
+
     useEffect(() => {
-        if (!model) return;
-        console.log('Model ok');
+        if (!model) {
+            return;
+        }
+
         setInterval(async () => {
             await predict();
         }, 500);
