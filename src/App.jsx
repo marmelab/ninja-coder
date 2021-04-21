@@ -11,8 +11,8 @@ function App() {
     return (
         <div className="App">
             <NinjaContextProvider
-                modelPath="models/v2/model.json"
-                metadataPath="models/v2/metadata.json"
+                modelPath="models/model.json"
+                metadataPath="models/metadata.json"
             >
                 <div className="App-content">
                     <PosePredictor />

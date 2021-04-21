@@ -1,4 +1,6 @@
 export const IDLE = 'IDLE';
+export const START = 'START';
+export const EXECUTE = 'EXECUTE';
 
 // Keywords
 

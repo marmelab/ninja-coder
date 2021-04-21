@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Prism from 'prismjs';
-
+import { EXECUTE } from './symbolsJS';
 import './Code.css';
 
 import { useNinjaContext } from '../NinjaContext';
@@ -24,6 +24,15 @@ export function Code() {
     const handleClear = () => {
         resetPredictions();
     };
+
+    useEffect(() => {
+        if (
+            predictions[predictions.length - 1] &&
+            predictions[predictions.length - 1] === EXECUTE
+        ) {
+            handleExecute();
+        }
+    }, [predictions]);
 
     return (
         <div className="Code">

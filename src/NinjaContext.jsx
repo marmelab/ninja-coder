@@ -1,5 +1,6 @@
 import React, { useEffect, useState, createContext, useContext } from 'react';
 import * as tmPose from '@teachablemachine/pose';
+import { START } from './code/symbolsJS';
 
 export const NinjaContext = createContext(undefined);
 
@@ -11,9 +12,18 @@ export const NinjaContextProvider = ({
 }) => {
     const [predictions, setPredictions] = useState(initialPredictions);
     const [model, setModel] = useState(null);
+    const [started, setStarted] = useState(false);
 
     const pushPrediction = (prediction) => {
+        console.log('push prediction', prediction.className);
         if (!prediction) {
+            return;
+        }
+        if (prediction.className === START) {
+            setStarted(true);
+            return;
+        }
+        if (!started) {
             return;
         }
         if (
@@ -29,6 +39,9 @@ export const NinjaContextProvider = ({
         setPredictions(initialPredictions);
     };
 
+    useEffect(() => {
+        if (started) console.log('LET START');
+    }, [started]);
     useEffect(() => {
         (async function () {
             // load the model and metadata

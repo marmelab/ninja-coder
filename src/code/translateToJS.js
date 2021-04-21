@@ -32,7 +32,7 @@ export function translateOneIntruction(instruction) {
 
         // Text
         case TEXT_COUCOU:
-            return 'Hello World!';
+            return '"Hello World!"';
 
         // Ignore errors
         default:
