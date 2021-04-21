@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Prism from 'prismjs';
-import { EXECUTE } from './symbolsJS';
+import { ACTION_EXECUTE } from './symbolsJS';
 import './Code.css';
 
 import { useNinjaContext } from '../NinjaContext';
@@ -28,9 +28,10 @@ export function Code() {
     useEffect(() => {
         if (
             predictions[predictions.length - 1] &&
-            predictions[predictions.length - 1] === EXECUTE
+            predictions[predictions.length - 1] === ACTION_EXECUTE
         ) {
             handleExecute();
+            handleClear();
         }
     }, [predictions]);
 
@@ -46,13 +47,6 @@ export function Code() {
                     </pre>
                 </div>
             </div>
-
-            <button className="Code-button-try" onClick={handleExecute}>
-                Take the risk!
-            </button>
-            <button className="Code-button-reset" onClick={handleClear}>
-                Reset
-            </button>
         </div>
     );
 }
