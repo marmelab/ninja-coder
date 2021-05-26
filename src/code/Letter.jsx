@@ -19,10 +19,10 @@ export function Letter() {
     const [isLetterVisible, showLetter] = useDisplayLetter();
 
     useEffect(() => {
-        if (lastPrediction.className !== IDLE) {
-            showLetter();
-        }
-    }, [lastPrediction]);
+        // if (lastPrediction.className !== IDLE) {
+        showLetter();
+        // }
+    }, [predictions]);
 
     if (!isLetterVisible) {
         return null;
@@ -44,7 +44,7 @@ const useDisplayLetter = () => {
         }
         setTimeout(() => {
             setVisible(false);
-        }, 1000);
+        }, 1500);
     }, [visible]);
 
     const show = () => {

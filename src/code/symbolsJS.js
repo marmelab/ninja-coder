@@ -15,9 +15,9 @@ export const SYNTAX_STRING = 'STRING';
 
 // Text
 
-export const TEXT_COUCOU = 'COUCOU';
+export const TEXT_COUCOU = 'HELLO';
 
 // Actions
 export const ACTION_ERASE = 'ERASE';
-export const ACTION_EXECUTE = 'EXECUTE';
+export const ACTION_EXECUTE = 'RUN';
 export const ACTION_START = 'START';

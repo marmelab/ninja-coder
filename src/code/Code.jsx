@@ -7,7 +7,7 @@ import { useNinjaContext } from '../NinjaContext';
 import { translate } from './translateToJS';
 
 export function Code() {
-    const { predictions, resetPredictions } = useNinjaContext();
+    const { predictions, resetPredictions, execute } = useNinjaContext();
 
     const convertedCode = translate(
         predictions.map((prediction) => prediction.className)
@@ -16,6 +16,10 @@ export function Code() {
     useEffect(() => {
         Prism.highlightAll();
     }, [predictions]);
+
+    useEffect(() => {
+        if (execute) handleExecute();
+    }, [execute]);
 
     const handleExecute = () => {
         eval(convertedCode);

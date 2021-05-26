@@ -24,7 +24,7 @@ export const PosePredictor = () => {
     });
 
     const predict = async () => {
-        if (!webcam) {
+        if (!isRunning) {
             return;
         }
 
@@ -59,8 +59,8 @@ export const PosePredictor = () => {
 
         setInterval(async () => {
             await predict();
-        }, 500);
-    }, [model]);
+        }, 1000);
+    }, [model, webcam]);
 
     return <Webcam webcam={webcam} />;
 };
@@ -89,11 +89,19 @@ const usePredictions = () => {
         setLoading(true);
 
         setTimeout(() => {
+            // console.log(`prediction ${prediction && prediction.className}`);
+            // console.log(
+            //     `previous prediction ${
+            //         previousPredictionRef.current &&
+            //         previousPredictionRef.current.className
+            //     }`
+            // );
             if (
                 prediction != null &&
-                prediction.probability > 0.9 &&
-                previousPredictionRef.current != null &&
-                prediction.className === previousPredictionRef.current.className
+                prediction.probability > 0.7 &&
+                (previousPredictionRef.current === null ||
+                    prediction.className !==
+                        previousPredictionRef.current.className)
             ) {
                 pushPrediction({ ...previousPredictionRef.current });
             }

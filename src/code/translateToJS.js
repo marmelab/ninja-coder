@@ -7,6 +7,8 @@ import {
     SYNTAX_SEMICOLON,
     SYNTAX_STRING,
     TEXT_COUCOU,
+    ACTION_START,
+    ACTION_EXECUTE,
 } from './symbolsJS';
 
 export function translateOneIntruction(instruction) {
@@ -28,6 +30,10 @@ export function translateOneIntruction(instruction) {
             return "'";
         case SYNTAX_SEMICOLON:
             return ';';
+        case ACTION_START:
+            return 'START!';
+        case ACTION_EXECUTE:
+            return 'RUN!';
 
         // Text
         case TEXT_COUCOU:

@@ -6,18 +6,20 @@ import { NinjaContextProvider } from './NinjaContext';
 import { PosePredictor } from './pose/PosePredictor';
 import { Code } from './code/Code';
 import { Letter } from './code/Letter';
+// import { Debug } from './debug/Debug';
 
 function App() {
     return (
         <NinjaContextProvider
-            modelPath="models/v3/model.json"
-            metadataPath="models/v3/metadata.json"
+            modelPath="models/model.json"
+            metadataPath="models/metadata.json"
         >
             <div className="App">
                 <div className="App-layout">
                     <div className="App-content">
                         <PosePredictor />
                         <Code />
+                        {/* <Debug /> */}
                     </div>
                 </div>
                 <Letter />

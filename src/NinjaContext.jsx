@@ -10,27 +10,32 @@ export const NinjaContextProvider = ({
     modelPath = 'models/model.json',
     metadataPath = 'models/metadata.json',
 }) => {
+    const [currentPrediction, setCurrentPrediction] = useState();
     const [predictions, setPredictions] = useState(initialPredictions);
     const [model, setModel] = useState(null);
     const [started, setStarted] = useState(false);
+    const [execute, setExecute] = useState(false);
 
     const pushPrediction = (prediction) => {
+        setCurrentPrediction(prediction);
         if (!prediction) {
             return;
         }
 
         if (prediction.className === ACTION_START) {
+            console.log('START');
             setStarted(true);
             return;
         }
 
         if (prediction.className === ACTION_EXECUTE) {
             setStarted(false);
+            setExecute(true);
             return;
         }
 
         // Don't save predictions if not started
-        if (!started) {
+        if (!started || execute) {
             return;
         }
 
@@ -42,7 +47,6 @@ export const NinjaContextProvider = ({
         ) {
             return;
         }
-
         setPredictions([...predictions, { ...prediction }]);
     };
 
@@ -55,13 +59,25 @@ export const NinjaContextProvider = ({
             // Load the model and metadata
             // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
             // Note: the pose library adds a tmPose object to your window (window.tmPose)
+            console.log('Loading...');
             const tmPoseModel = await tmPose.load(modelPath, metadataPath);
-
+            console.log('Loaded...');
             setModel(tmPoseModel);
         })();
     }, []);
+    // useEffect(() => {
+    //     console.log(JSON.stringify(predictions));
+    // }, [predictions]);
 
-    const value = { model, predictions, pushPrediction, resetPredictions };
+    const value = {
+        model,
+        predictions,
+        currentPrediction,
+        execute,
+        started,
+        pushPrediction,
+        resetPredictions,
+    };
 
     return (
         <NinjaContext.Provider value={value}>{children}</NinjaContext.Provider>
