@@ -87,6 +87,8 @@ The models can be found inside the `public/models` folder.
 
 You can train your own model using [Teachable Machine](https://teachablemachine.withgoogle.com/).
 
+![Teachable_Machine_Models](https://user-images.githubusercontent.com/99944/119851676-e48faa80-bf0e-11eb-9890-6d74f12176e8.png)
+
 All you have to do is to create one different pose by JavaScript keyword, group of keywords, or by action (see the `symbols.js` file).
 
 ```js
