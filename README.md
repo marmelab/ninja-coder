@@ -2,6 +2,8 @@
 
 Become a real Ninja Coder using this training application!
 
+https://user-images.githubusercontent.com/99944/119852148-536d0380-bf0f-11eb-86c8-7c186bd94b0c.mp4
+
 <table>
         <tr>
             <td><img width="60" src="https://cdnjs.cloudflare.com/ajax/libs/octicons/8.5.0/svg/beaker.svg" alt="hackday" /></td>
