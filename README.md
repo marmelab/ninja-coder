@@ -9,7 +9,7 @@ https://user-images.githubusercontent.com/99944/119852148-536d0380-bf0f-11eb-86c
             <td><img width="60" src="https://cdnjs.cloudflare.com/ajax/libs/octicons/8.5.0/svg/beaker.svg" alt="hackday" /></td>
             <td><strong>Archived Repository</strong>
                 <br />
-                The code of this repository was written during several <strong>dack days</strong> by <a href="https://marmelab.com/en/jobs">Marmelab developers</a>. It's part of the distributed R&D effort at Marmelab, where each developer spends 2 days a month for learning and experimentation.
+                The code of this repository was written during several <strong>hack days</strong> by <a href="https://marmelab.com/en/jobs">Marmelab developers</a>. It's part of the distributed R&D effort at Marmelab, where each developer spends 2 days a month for learning and experimentation.
                 <br />
                 <strong>This code is not intended to be used in production, and is not maintained.</strong>
             </td>
